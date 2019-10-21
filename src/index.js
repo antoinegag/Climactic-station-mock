@@ -26,6 +26,14 @@ function randomDouble(min, max) {
   return Math.floor(Math.random() * max) + min + Math.random();
 }
 
+app.get("/", (req, res) => {
+  if (args.verbose) {
+    console.info("Sending version data");
+  }
+
+  return res.json({ version: "0.4.2" });
+});
+
 app.get("/data", (req, res) => {
   const info = {
     temp: randomDouble(18, 25).toFixed(2),
