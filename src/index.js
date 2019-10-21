@@ -26,21 +26,31 @@ function randomDouble(min, max) {
   return Math.floor(Math.random() * max) + min + Math.random();
 }
 
-app.get("/data", (req, res) =>
-  res.json({
+app.get("/data", (req, res) => {
+  const info = {
     temp: randomDouble(18, 25).toFixed(2),
     humidity: randomDouble(20, 60).toFixed(2),
     pressure: randomDouble(99000, 100000).toFixed(2)
-  })
-);
+  };
 
-app.get("/climactic-station-node", (req, res) =>
-  res.json({ "climactic-station-node": true })
-);
+  if (args.verbose) {
+    console.info("Sending data:", info);
+  }
+
+  return res.json(info);
+});
+
+app.get("/climactic-station-node", (req, res) => {
+  if (args.verbose) {
+    console.info("Answering verification");
+  }
+
+  return res.json({ "climactic-station-node": true });
+});
 
 app.get("/beep", (req, res) => {
   if (args.verbose) {
-    console.info(`beep`);
+    console.info(`Beep`);
   }
 
   return res.json({ error: null });
@@ -48,7 +58,7 @@ app.get("/beep", (req, res) => {
 
 app.get("/dbeep", (req, res) => {
   if (args.verbose) {
-    console.info(`beep beep`);
+    console.info(`Beep bop`);
   }
 
   return res.json({ error: null });
@@ -59,4 +69,12 @@ for (let i = 0; i < args.count; i++) {
   if (args.verbose) {
     console.info(`Listening on port ${port + i}`);
   }
+}
+
+if (args.verbose) {
+  console.info(
+    `Started ${args.count} instance${
+      args.count > 1 ? "s" : ""
+    } on port range ${port}-${port + args.count - 1}`
+  );
 }
